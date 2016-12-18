@@ -1,0 +1,16 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - free -m
+    - df -h
+    - docker build -t hometask_6 . 
+
+test:
+  override:
+    - docker run -ti --rm -e OPENMLKEY=$OPENMLKEY -v `pwd`:/notebooks hometask_6 bash -c
+        "cd /notebooks ; free -m ;
+        jupyter nbconvert --to html --output-dir=$CIRCLE_ARTIFACTS --ExecutePreprocessor.timeout=-1 --execute D0_example.ipynb ;
+        "
